@@ -16,15 +16,17 @@ jobs:
         with:
           fetch-depth: 0
           ref: f15c258be8f269875b351f4c437992194c1baa2b
-      - name: Apply immutable patch and publish source branch
-        shell: bash
+      - name: Prepare source branch
         run: |
-          set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git checkout -b zz-sol-harborquill/libpcap27-stack-depth-guard
-          curl -fsSL "https://raw.githubusercontent.com/woahwhattheheck/bounty-concierge/29cca00539fbbb229df2792f8fb0d8d25b8bdf95/deliverables/google_patch_rewards_libpcap_27/libpcap-27-stack-depth-guard.patch" -o /tmp/libpcap27.patch
+      - name: Fetch immutable patch
+        run: curl -fsSL "https://raw.githubusercontent.com/woahwhattheheck/bounty-concierge/29cca00539fbbb229df2792f8fb0d8d25b8bdf95/deliverables/google_patch_rewards_libpcap_27/libpcap-27-stack-depth-guard.patch" -o /tmp/libpcap27.patch
+      - name: Apply and commit patch
+        run: |
           git apply /tmp/libpcap27.patch
           git add optimize.c
           git commit -m "Prevent optimizer stack exhaustion on deeply nested CFGs"
-          git push origin HEAD:refs/heads/zz-sol-harborquill/libpcap27-stack-depth-guard
+      - name: Publish source branch
+        run: git push origin HEAD:refs/heads/zz-sol-harborquill/libpcap27-stack-depth-guard
