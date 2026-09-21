@@ -21,10 +21,10 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git checkout -b zz-sol-harborquill/libpcap27-stack-depth-guard
-      - name: Fetch immutable patch
+      - name: Fetch and canonicalize immutable patch body
         run: |
           curl -fsSL "https://raw.githubusercontent.com/woahwhattheheck/bounty-concierge/29cca00539fbbb229df2792f8fb0d8d25b8bdf95/deliverables/google_patch_rewards_libpcap_27/libpcap-27-stack-depth-guard.patch" -o /tmp/libpcap27.patch
-          sed -i 's/@@ -299,6 +299,82/@@ -299,7 +299,96/; s/@@ -2466,6 +2542,12/@@ -2466,6 +2555,12/' /tmp/libpcap27.patch
+          sed -i 's/@@ -299,6 +299,82 @@/@@ -340,7 +340,96 @@/; s/@@ -2466,6 +2542,12 @@/@@ -2573,5 +2662,11 @@/' /tmp/libpcap27.patch
       - name: Apply patch
         run: git apply /tmp/libpcap27.patch
       - name: Commit patch
